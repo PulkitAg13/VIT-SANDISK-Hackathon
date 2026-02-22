@@ -1,4 +1,4 @@
-from fastapi import APIRouter, UploadFile, File
+from fastapi import APIRouter, UploadFile, File, Form
 from app.services.file_parser import extract_text
 from app.services.gemini_service import generate_answer
 
@@ -6,7 +6,7 @@ router = APIRouter()
 
 @router.post("/upload-and-ask")
 async def upload_and_ask(
-    question: str,
+    question: str = Form(...),
     file: UploadFile = File(...)
 ):
 
