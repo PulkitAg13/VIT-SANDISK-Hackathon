@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>File Heatmap</title>
+<style>
+body { font-family: Arial; margin: 20px; }
+
+button {
+  padding: 10px 15px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.summary {
+  margin: 15px 0;
+  font-weight: bold;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 150px);
+  gap: 10px;
+}
+
+.box {
+  padding: 10px;
+  color: white;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 14px;
+}
+</style>
+</head>
+<body>
+
+<h2>🔥 File Heatmap Dashboard</h2>
+
+<button onclick="scanFiles()">Scan Storage</button>
+<button onclick="loadData()">Refresh Heatmap</button>
+
+<div class="summary" id="summary"></div>
+
+<div class="grid" id="heatmap"></div>
+
+<script>
+
+async function scanFiles() {
+  await fetch("http://127.0.0.1:8000/scan", { method: "POST" });
+  loadData();
+}
+
+async function loadData() {
+
+  // Load Summary
+  const summaryRes = await fetch("http://127.0.0.1:8000/summary");
+  const summaryData = await summaryRes.json();
+
+  document.getElementById("summary").innerHTML =
+    `🔥 Hot: ${summaryData.Hot} | 🟠 Warm: ${summaryData.Warm} | 🔵 Cold: ${summaryData.Cold}`;
+
+  // Load Heatmap
+  const res = await fetch("http://127.0.0.1:8000/analyze");
+  const data = await res.json();
+
+  const container = document.getElementById("heatmap");
+  container.innerHTML = "";
+
+  data.forEach(file => {
+    const div = document.createElement("div");
+    div.className = "box";
+
+    // Clear classification colors
+    if (file.memory_type === "Hot") {
+      div.style.backgroundColor = "#e74c3c";   // Red
+    } else if (file.memory_type === "Warm") {
+      div.style.backgroundColor = "#f39c12";   // Orange
+    } else {
+      div.style.backgroundColor = "#3498db";   // Blue
+    }
+
+    div.innerHTML =
+      `<strong>${file.name}</strong><br>
+       ${file.memory_type}<br>
+       Score: ${file.heat_score}`;
+
+    container.appendChild(div);
+  });
+}
+
+// Load automatically on page open
+loadData();
+
+</script>
+
+</body>
+</html>

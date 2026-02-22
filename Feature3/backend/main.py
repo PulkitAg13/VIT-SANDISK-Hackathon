@@ -2,14 +2,23 @@ from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 from backend.database import SessionLocal, engine
 from backend.models import Base, File
-from backend.scanner import generate_sample_files
+from backend.scanner import scan_storage_folder
 from backend.heat_engine import calculate_heat, classify
 from backend.recommendation import generate_recommendation
 from datetime import datetime
+from fastapi.middleware.cors import CORSMiddleware
 
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Hot vs Cold Memory Brain Engine")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 def get_db():
     db = SessionLocal()
@@ -18,26 +27,32 @@ def get_db():
     finally:
         db.close()
 
-@app.post("/load-sample-data")
-def load_sample_data(db: Session = Depends(get_db)):
-    files = generate_sample_files()
+@app.post("/scan")
+def scan(db: Session = Depends(get_db)):
+
+    files = scan_storage_folder()
 
     for f in files:
-        db_file = File(
-            name=f["name"],
-            path=f["path"],
-            created_at=f["created_at"],
-            last_accessed=f["last_accessed"],
-            open_count=f["open_count"],
-            size=f["size"]
-        )
-        db.add(db_file)
+        existing = db.query(File).filter(File.path == f["path"]).first()
+
+        if not existing:
+            db_file = File(
+                name=f["name"],
+                path=f["path"],
+                created_at=f["created_at"],
+                last_accessed=f["last_accessed"],
+                last_modified=f["last_modified"],
+                open_count=0,
+                size=f["size"]
+            )
+            db.add(db_file)
 
     db.commit()
-    return {"message": "Sample data loaded"}
+
+    return {"message": f"{len(files)} files scanned successfully"}
 
 @app.get("/analyze")
-def analyze_files(db: Session = Depends(get_db)):
+def analyze(db: Session = Depends(get_db)):
     files = db.query(File).all()
 
     result = []
@@ -49,6 +64,7 @@ def analyze_files(db: Session = Depends(get_db)):
 
         result.append({
             "name": file.name,
+            "path": file.path,
             "heat_score": round(heat, 3),
             "memory_type": memory_type,
             "recommendation": recommendation
