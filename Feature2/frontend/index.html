@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Personal Memory Assistant</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1>🧠 Personal Memory Assistant</h1>
+
+        <div class="card">
+            <input type="file" id="fileInput" />
+            
+            <textarea 
+                id="questionInput" 
+                placeholder="Ask something like: Why do I have this file?"
+            ></textarea>
+
+            <button onclick="submitForm()">Analyze File</button>
+        </div>
+
+        <div id="result" class="result hidden">
+            <h3>AI Response</h3>
+            <p id="answerText"></p>
+        </div>
+
+        <div id="loader" class="loader hidden">
+            Thinking...
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
