@@ -1,0 +1,3 @@
+# requirements.txt
+
+# Placeholder file for Smart File Finder project.

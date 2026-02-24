@@ -1,0 +1,185 @@
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background-color: #ffffff;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Background Pattern */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: url("../assets/sandisk-pattern.png");
+  background-repeat: repeat;
+  background-size: 300px; /* Smaller = more icons */
+  opacity: 1; /* FULL visibility */
+  z-index: -1;
+}
+
+
+/* HEADER */
+.header {
+  text-align: center;
+  padding: 70px 20px 30px;
+}
+
+.header h1 {
+  font-size: 46px;
+  font-weight: 900;
+  background: linear-gradient(90deg, #d71920, #ff4c4c);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header p {
+  margin-top: 12px;
+  font-size: 19px;
+  font-weight: 600;
+  color: #1a1a1a;                 /* Much darker */
+  letter-spacing: 0.3px;
+  text-shadow: 
+    0 2px 6px rgba(255,255,255,0.9),
+    0 0 1px rgba(0,0,0,0.15);      /* Sharp contrast boost */
+}
+
+/* SEARCH */
+.search-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 50px;
+}
+
+.search-box {
+  width: 60%;
+  display: flex;
+  border-radius: 60px;
+  overflow: hidden;
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+}
+
+.search-box input {
+  flex: 1;
+  padding: 20px 25px;
+  border: none;
+  font-size: 16px;
+  outline: none;
+  background: transparent;
+}
+
+.search-box button {
+  background: linear-gradient(90deg, #d71920, #ff4c4c);
+  color: white;
+  border: none;
+  padding: 0 35px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.search-box button:hover {
+  transform: scale(1.05);
+}
+
+/* RESULTS */
+.results {
+  width: 70%;
+  margin: auto;
+}
+
+/* CARD */
+.result-card {
+  background: rgba(255,255,255,0.85);
+  backdrop-filter: blur(12px);
+  border-radius: 25px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+  transition: 0.4s ease;
+  position: relative;
+}
+
+.result-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 25px 70px rgba(215,25,32,0.2);
+}
+
+.top-badge {
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  background: #d71920;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* FILE TITLE */
+.result-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.result-path {
+  font-size: 13px;
+  color: #777;
+  margin-bottom: 20px;
+}
+
+/* CONFIDENCE BAR */
+.confidence-bar-bg {
+  height: 10px;
+  background: #eee;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.confidence-bar-fill {
+  height: 10px;
+  background: linear-gradient(90deg, #d71920, #ff4c4c);
+  border-radius: 20px;
+  transition: width 0.8s ease;
+}
+
+.confidence-text {
+  margin-top: 8px;
+  font-size: 13px;
+  color: #444;
+}
+
+/* OPEN BUTTON */
+.open-button {
+  margin-top: 18px;
+  padding: 10px 22px;
+  border-radius: 40px;
+  border: none;
+  background: #d71920;
+  color: white;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.open-button:hover {
+  background: #a71217;
+  transform: scale(1.05);
+}
+
+.empty-state {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 17px;
+  font-weight: 600;
+  color: #111;                   /* Dark */
+  letter-spacing: 0.2px;
+  text-shadow: 
+    0 2px 6px rgba(255,255,255,0.9),
+    0 0 1px rgba(0,0,0,0.2);
+  opacity: 0.95;
+}

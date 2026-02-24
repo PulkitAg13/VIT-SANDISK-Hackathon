@@ -1,0 +1,4 @@
+Artificial Intelligence Research Notes
+
+This file discusses neural networks,
+machine learning models, and transformer-based embeddings.
