@@ -3,31 +3,163 @@
 <head>
     <title>Personal Memory Assistant</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 
-    <div class="container">
-        <h1>🧠 Personal Memory Assistant</h1>
+    <div class="app-shell">
+        <header class="window-bar">
+            <div class="window-title">
+                <span class="brand-icon" aria-hidden="true"><i class="fa-solid fa-hard-drive"></i></span>
+                <div class="title-stack">
+                    <h1>Personal Memory Assistant</h1>
+                    <p>SanDisk File Intelligence</p>
+                </div>
+            </div>
+            <div class="window-controls" aria-hidden="true">
+                <span class="control"></span>
+                <span class="control"></span>
+                <span class="control close"></span>
+            </div>
+        </header>
 
-        <div class="card">
-            <input type="file" id="fileInput" />
-            
-            <textarea 
-                id="questionInput" 
-                placeholder="Ask something like: Why do I have this file?"
-            ></textarea>
+        <div class="workspace">
+            <aside class="sidebar">
+                <div class="sidebar-section">
+                    <div class="section-title">Workspace</div>
+                    <button class="nav-item active" data-view="analyze"><i class="fa-solid fa-file-lines"></i> Analyze</button>
+                    <button class="nav-item" data-view="recent"><i class="fa-solid fa-folder-open"></i> Recent Files</button>
+                    <button class="nav-item" data-view="history"><i class="fa-solid fa-clock-rotate-left"></i> History</button>
+                    <button class="nav-item" data-view="settings"><i class="fa-solid fa-gear"></i> Settings</button>
+                </div>
+                <div class="sidebar-section">
+                    <div class="section-title">Session</div>
+                    <div class="status-pill"><i class="fa-solid fa-shield-halved"></i> Secure Session</div>
+                </div>
+            </aside>
 
-            <button onclick="submitForm()">Analyze File</button>
+            <main class="content">
+                <section class="view active" id="view-analyze">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2>Analyze a File</h2>
+                            <span class="panel-subtitle">Add a file and ask a question for context</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="fileInput"><i class="fa-solid fa-file-arrow-up"></i> Upload File</label>
+                            <input type="file" id="fileInput" />
+                        </div>
+                        <div class="form-group">
+                            <label for="questionInput"><i class="fa-solid fa-message"></i> Question</label>
+                            <textarea 
+                                id="questionInput" 
+                                placeholder="Ask something specific like: What is this file used for and what should I do next?"
+                            ></textarea>
+                        </div>
+
+                        <div class="action-row">
+                            <button class="primary" onclick="submitForm()">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                Analyze File
+                            </button>
+                            <button class="secondary" onclick="clearForm()">
+                                <i class="fa-solid fa-rotate"></i>
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="view" id="view-recent">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2>Recent Files</h2>
+                            <span class="panel-subtitle">Quick access to your latest uploads</span>
+                        </div>
+                        <div id="recentList" class="list"></div>
+                        <div id="recentEmpty" class="empty-state">
+                            <i class="fa-solid fa-folder-open"></i>
+                            <p>No recent files available in this session.</p>
+                        </div>
+                        <div class="action-row single">
+                            <button class="secondary" onclick="clearRecent()">
+                                <i class="fa-solid fa-trash"></i>
+                                Clear Recent
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="view" id="view-history">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2>History</h2>
+                            <span class="panel-subtitle">Previous analysis requests appear here</span>
+                        </div>
+                        <div id="historyList" class="list"></div>
+                        <div id="historyEmpty" class="empty-state">
+                            <i class="fa-solid fa-clock-rotate-left"></i>
+                            <p>No history records yet.</p>
+                        </div>
+                        <div class="action-row single">
+                            <button class="secondary" onclick="clearHistory()">
+                                <i class="fa-solid fa-trash"></i>
+                                Clear History
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="view" id="view-settings">
+                    <div class="panel">
+                        <div class="panel-header">
+                            <h2>Settings</h2>
+                            <span class="panel-subtitle">Configure your LLM provider access</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="apiKeyInput"><i class="fa-solid fa-key"></i> API Key</label>
+                            <input type="password" id="apiKeyInput" placeholder="Enter your LLM API key" />
+                            <span class="helper-text">Stored locally on this device. Required to enable analysis.</span>
+                        </div>
+                        <div class="action-row">
+                            <button class="primary" onclick="saveApiKey()">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                Save Key
+                            </button>
+                            <button class="secondary" onclick="clearApiKey()">
+                                <i class="fa-solid fa-trash"></i>
+                                Remove
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                <aside class="insights">
+                    <div id="result" class="result hidden">
+                        <div class="result-header">
+                            <div class="result-title">
+                                <h3><i class="fa-solid fa-lightbulb"></i> Response</h3>
+                                <span class="tag">AI Insight</span>
+                            </div>
+                            <div class="result-actions">
+                                <button id="copyResponse" class="icon-btn" title="Copy response"><i class="fa-solid fa-copy"></i></button>
+                                <button id="downloadResponse" class="icon-btn" title="Download response"><i class="fa-solid fa-download"></i></button>
+                            </div>
+                        </div>
+                        <p id="answerText"></p>
+                    </div>
+
+                    <div id="loader" class="loader hidden">
+                        <i class="fa-solid fa-circle-notch"></i>
+                        Thinking...
+                    </div>
+                </aside>
+            </main>
         </div>
 
-        <div id="result" class="result hidden">
-            <h3>AI Response</h3>
-            <p id="answerText"></p>
-        </div>
-
-        <div id="loader" class="loader hidden">
-            Thinking...
-        </div>
+        <footer class="status-bar">
+            <div class="status-right">SanDisk Hackathon Build</div>
+        </footer>
     </div>
 
     <script src="script.js"></script>
