@@ -1,12 +1,18 @@
 from fastapi import FastAPI, Depends
-from sqlalchemy.orm import Session
-from backend.database import SessionLocal, engine
-from backend.models import Base, File
-from backend.scanner import scan_storage_folder
-from backend.heat_engine import calculate_heat, classify
-from backend.recommendation import generate_recommendation
-from datetime import datetime
 from fastapi.middleware.cors import CORSMiddleware
+from sqlalchemy.orm import Session
+try:
+    from backend.database import SessionLocal, engine
+    from backend.models import Base, File
+    from backend.scanner import scan_storage_folder
+    from backend.heat_engine import calculate_heat, classify
+    from backend.recommendation import generate_recommendation
+except ModuleNotFoundError:
+    from database import SessionLocal, engine
+    from models import Base, File
+    from scanner import scan_storage_folder
+    from heat_engine import calculate_heat, classify
+    from recommendation import generate_recommendation
 
 Base.metadata.create_all(bind=engine)
 
@@ -46,6 +52,12 @@ def scan(db: Session = Depends(get_db)):
                 size=f["size"]
             )
             db.add(db_file)
+        else:
+            existing.name = f["name"]
+            existing.created_at = f["created_at"]
+            existing.last_accessed = f["last_accessed"]
+            existing.last_modified = f["last_modified"]
+            existing.size = f["size"]
 
     db.commit()
 
@@ -63,11 +75,17 @@ def analyze(db: Session = Depends(get_db)):
         recommendation = generate_recommendation(file, memory_type)
 
         result.append({
+            "id": file.id,
             "name": file.name,
             "path": file.path,
             "heat_score": round(heat, 3),
             "memory_type": memory_type,
-            "recommendation": recommendation
+            "recommendation": recommendation,
+            "size": file.size,
+            "open_count": file.open_count,
+            "created_at": file.created_at.isoformat() if file.created_at else None,
+            "last_accessed": file.last_accessed.isoformat() if file.last_accessed else None,
+            "last_modified": file.last_modified.isoformat() if file.last_modified else None
         })
 
     return result

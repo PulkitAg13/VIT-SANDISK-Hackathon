@@ -1,5 +1,8 @@
 from sqlalchemy import Column, Integer, String, DateTime
-from backend.database import Base
+try:
+    from backend.database import Base
+except ModuleNotFoundError:
+    from database import Base
 from datetime import datetime
 
 class File(Base):

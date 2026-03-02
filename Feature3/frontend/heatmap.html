@@ -1,96 +1,180 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>File Heatmap</title>
-<style>
-body { font-family: Arial; margin: 20px; }
-
-button {
-  padding: 10px 15px;
-  margin-right: 10px;
-  cursor: pointer;
-}
-
-.summary {
-  margin: 15px 0;
-  font-weight: bold;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, 150px);
-  gap: 10px;
-}
-
-.box {
-  padding: 10px;
-  color: white;
-  border-radius: 8px;
-  text-align: center;
-  font-size: 14px;
-}
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>File Heatmap Desktop Console</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="app-shell">
+    <header class="window-bar">
+      <div class="window-title">
+        <span class="brand-badge" aria-hidden="true">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="6" width="18" height="12" rx="2"></rect>
+            <path d="M7 10h.01M11 10h.01M15 10h.01"></path>
+          </svg>
+        </span>
+        <div class="title-stack">
+          <h1>File Heatmap Desktop Console</h1>
+          <p>SanDisk Memory Temperature Insights</p>
+        </div>
+      </div>
+      <div class="window-right">
+        <button class="btn" id="themeToggle" title="Toggle Theme">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M12 3a7 7 0 1 0 9 9 9 9 0 1 1-9-9"></path>
+          </svg>
+          Dark Mode
+        </button>
+        <div class="window-controls" aria-hidden="true">
+          <span class="control"></span>
+          <span class="control"></span>
+          <span class="control close"></span>
+        </div>
+      </div>
+    </header>
 
-<h2>🔥 File Heatmap Dashboard</h2>
+    <div class="workspace">
+      <aside class="sidebar">
+        <div>
+          <div class="section-title">Workspace</div>
+          <button class="nav-item active" id="navDashboard">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="1"></rect><rect x="13" y="3" width="8" height="5" rx="1"></rect><rect x="13" y="10" width="8" height="11" rx="1"></rect><rect x="3" y="13" width="8" height="8" rx="1"></rect></svg>
+            Dashboard
+          </button>
+          <button class="nav-item" id="navList">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><circle cx="4" cy="6" r="1"></circle><circle cx="4" cy="12" r="1"></circle><circle cx="4" cy="18" r="1"></circle></svg>
+            List View
+          </button>
+          <button class="nav-item" id="navInsights">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V10"></path><path d="M18 20V4"></path><path d="M6 20v-6"></path></svg>
+            Insights
+          </button>
+        </div>
 
-<button onclick="scanFiles()">Scan Storage</button>
-<button onclick="loadData()">Refresh Heatmap</button>
+        <div>
+          <div class="section-title">Classification Filter</div>
+          <label class="nav-item"><input type="checkbox" class="filter" value="Hot" checked>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s4 4 4 8a4 4 0 0 1-8 0c0-2 1-4 4-8z"></path><path d="M8 14c0 2.2 1.8 4 4 4"></path></svg>
+            Hot
+          </label>
+          <label class="nav-item"><input type="checkbox" class="filter" value="Warm" checked>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+            Warm
+          </label>
+          <label class="nav-item"><input type="checkbox" class="filter" value="Cold" checked>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M4.9 4.9l14.2 14.2M2 12h20M4.9 19.1L19.1 4.9"></path></svg>
+            Cold
+          </label>
+        </div>
 
-<div class="summary" id="summary"></div>
+        <div>
+          <div class="section-title">Summary</div>
+          <div id="summaryChips" style="display:flex;flex-direction:column;gap:8px"></div>
+        </div>
+      </aside>
 
-<div class="grid" id="heatmap"></div>
+      <main class="main-panel">
+        <div class="toolbar">
+          <div class="search-wrap">
+            <input id="searchInput" type="text" placeholder="Search files by name (Ctrl+F)">
+          </div>
 
-<script>
+          <div class="toolbar-actions">
+            <select id="sortSelect" class="btn" title="Sort">
+              <option value="heat_desc">Sort: Heat High-Low</option>
+              <option value="heat_asc">Sort: Heat Low-High</option>
+              <option value="name_asc">Sort: Name A-Z</option>
+              <option value="name_desc">Sort: Name Z-A</option>
+            </select>
+          </div>
 
-async function scanFiles() {
-  await fetch("http://127.0.0.1:8000/scan", { method: "POST" });
-  loadData();
-}
+          <div class="toolbar-actions">
+            <button class="btn primary" id="scanBtn" title="Ctrl+S">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7h18"></path><path d="M7 3v4M17 3v4"></path><rect x="3" y="7" width="18" height="14" rx="2"></rect></svg>
+              Scan
+            </button>
+            <button class="btn" id="refreshBtn" title="Ctrl+R">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.5 9a9 9 0 0 1 14.1-3L23 10M1 14l5.4 4a9 9 0 0 0 14.1-3"></path></svg>
+              Refresh
+            </button>
+          </div>
+        </div>
 
-async function loadData() {
+        <div class="main-content">
+          <div class="meta-row">
+            <span id="lastScanned">Last scanned: Not available</span>
+            <span id="resultCount">0 files</span>
+          </div>
 
-  // Load Summary
-  const summaryRes = await fetch("http://127.0.0.1:8000/summary");
-  const summaryData = await summaryRes.json();
+          <div id="gridView" class="grid-view"></div>
 
-  document.getElementById("summary").innerHTML =
-    `🔥 Hot: ${summaryData.Hot} | 🟠 Warm: ${summaryData.Warm} | 🔵 Cold: ${summaryData.Cold}`;
+          <div id="listView" class="list-view">
+            <table>
+              <thead>
+                <tr>
+                  <th><span class="th-with-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19h16"></path><path d="M4 5h16v14H4z"></path></svg>Name</span></th>
+                  <th><span class="th-with-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8"></circle></svg>Type</span></th>
+                  <th><span class="th-with-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20V10"></path><path d="M18 20V4"></path><path d="M6 20v-6"></path></svg>Heat</span></th>
+                  <th><span class="th-with-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>Recommendation</span></th>
+                </tr>
+              </thead>
+              <tbody id="listBody"></tbody>
+            </table>
+          </div>
 
-  // Load Heatmap
-  const res = await fetch("http://127.0.0.1:8000/analyze");
-  const data = await res.json();
+          <div id="insightsView" class="insights-view hidden">
+            <div class="insights-grid" id="insightsStats"></div>
 
-  const container = document.getElementById("heatmap");
-  container.innerHTML = "";
+            <div class="insights-panels">
+              <section class="insight-panel">
+                <h4>Memory Distribution</h4>
+                <div id="memoryBreakdown"></div>
+              </section>
 
-  data.forEach(file => {
-    const div = document.createElement("div");
-    div.className = "box";
+              <section class="insight-panel">
+                <h4>Top Hot Files</h4>
+                <div id="topHotFiles"></div>
+              </section>
 
-    // Clear classification colors
-    if (file.memory_type === "Hot") {
-      div.style.backgroundColor = "#e74c3c";   // Red
-    } else if (file.memory_type === "Warm") {
-      div.style.backgroundColor = "#f39c12";   // Orange
-    } else {
-      div.style.backgroundColor = "#3498db";   // Blue
-    }
+              <section class="insight-panel">
+                <h4>Recommendation Overview</h4>
+                <div id="recommendationStats"></div>
+              </section>
+            </div>
+          </div>
 
-    div.innerHTML =
-      `<strong>${file.name}</strong><br>
-       ${file.memory_type}<br>
-       Score: ${file.heat_score}`;
+          <div id="emptyState" class="empty-state hidden">
+            No files match the current filters. Run scan or adjust search/filter settings.
+          </div>
+        </div>
+      </main>
 
-    container.appendChild(div);
-  });
-}
+      <aside class="details-panel">
+        <div class="detail-head">
+          <h3><span class="heading-with-icon"><svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16l4-2 4 2 4-2 4 2V8z"></path><path d="M14 2v6h6"></path></svg>File Details</span></h3>
+          <p>Selection-based metadata and recommendation</p>
+        </div>
+        <div id="detailsContent" class="detail-grid">
+          <div class="empty-state">Select a file card or row to view details.</div>
+        </div>
+        <div>
+          <button id="copyPathBtn" class="btn" disabled>
+            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="13" height="13" rx="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+            Copy Path
+          </button>
+        </div>
+      </aside>
+    </div>
 
-// Load automatically on page open
-loadData();
+    <footer class="status-bar">
+      <span id="statusText">Ready</span>
+      <span id="statusMeta">Ctrl+S Scan • Ctrl+R Refresh • Ctrl+F Search • Ctrl+D Theme</span>
+    </footer>
+  </div>
 
-</script>
-
+  <script src="script.js" defer></script>
 </body>
 </html>
