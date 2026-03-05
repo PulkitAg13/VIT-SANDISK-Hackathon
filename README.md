@@ -113,3 +113,12 @@ This allows users to **instantly understand storage usage patterns**.
 ## 6️⃣ Storage Analytics Dashboard
 
 Provides summary statistics:
+Hot Files : X
+Warm Files : Y
+Cold Files : Z
+
+This helps users quickly see how their storage is distributed.
+
+---
+
+# 🏗️ System Architecture
