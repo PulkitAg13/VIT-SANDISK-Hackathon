@@ -119,9 +119,6 @@ This helps users quickly see how their storage is distributed.
 
 ---
 
-
----
-
 # 🛠️ Tech Stack
 
 ### Backend
