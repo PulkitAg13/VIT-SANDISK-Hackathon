@@ -111,13 +111,11 @@ This allows users to **instantly understand storage usage patterns**.
 ---
 
 ## 6️⃣ Storage Analytics Dashboard
-
-Provides summary statistics:
-Hot Files : X
-Warm Files : Y
-Cold Files : Z
-
-This helps users quickly see how their storage is distributed.
+Provides summary statistics:  
+Hot Files : X  
+Warm Files : Y  
+Cold Files : Z  
+This helps users quickly see how their storage is distributed.  
 
 ---
 
@@ -146,23 +144,23 @@ This helps users quickly see how their storage is distributed.
 
 # 📂 Project Structure
 Feature3
-│
-├── backend
-│ ├── main.py
-│ ├── database.py
-│ ├── models.py
-│ ├── scanner.py
-│ ├── heat_engine.py
-│ └── recommendation.py
-│
-├── storage
-│ └── (files to analyze)
-│
-├── frontend
-│ └── index.html
-│
-└── README.md
-
+│  
+├── backend  
+│ ├── main.py  
+│ ├── database.py  
+│ ├── models.py  
+│ ├── scanner.py  
+│ ├── heat_engine.py  
+│ └── recommendation.py  
+│  
+├── storage  
+│ └── (files to analyze)  
+│  
+├── frontend  
+│ └── index.html  
+│  
+└── README.md  
+  
 ---
 
 # ⚙️ How to Run the Project
@@ -175,7 +173,7 @@ pip install fastapi uvicorn sqlalchemy
 ## 2️⃣ Start the Backend
 uvicorn backend.main:app --reload
 
-Server runs on:
+Server runs on:  
 http://127.0.0.1:8000
 
 ---
@@ -186,26 +184,22 @@ http://127.0.0.1:8000/docs
 ---
 
 ## 4️⃣ Open Frontend
-
-Open the HTML dashboard in a browser:
-frontend/index.html
+Open the HTML dashboard in a browser:  
+frontend/index.html  
 
 ---
 
 # 📊 API Endpoints
 
 ## Scan Files
-POST /scan
-
-Scans the storage folder and indexes files.
+POST /scan  
+Scans the storage folder and indexes files.  
 
 ---
 
 ## Analyze Files
-GET /summary
-
-Returns counts of:
-
+GET /summary  
+Returns counts of:  
 - Hot files
 - Warm files
 - Cold files
@@ -213,12 +207,12 @@ Returns counts of:
 ---
 
 # 🎯 Example Output
-{
-"name": "report.pdf",
-"heat_score": 0.92,
-"memory_type": "Warm",
-"recommendation": "Standard storage"
-}
+{  
+"name": "report.pdf",  
+"heat_score": 0.92,  
+"memory_type": "Warm",  
+"recommendation": "Standard storage"  
+}  
 
 ---
 
@@ -249,7 +243,3 @@ This system can be used in:
 Developed as part of a **Storage Intelligence Hackathon** to demonstrate how **AI can optimize memory and storage systems** by learning file usage behavior.
 
 ---
-
-# 👨‍💻 Authors
-
-Team Project – AI Storage Intelligence System
