@@ -121,4 +121,46 @@ This helps users quickly see how their storage is distributed.
 
 ---
 
-# 🏗️ System Architecture
+
+---
+
+# 🛠️ Tech Stack
+
+### Backend
+- **FastAPI**
+- **Python**
+- **SQLAlchemy**
+- **SQLite**
+
+### Frontend
+- **HTML**
+- **CSS**
+- **JavaScript**
+
+### Data Processing
+- File metadata analysis
+- Heat score computation
+- Storage classification algorithms
+
+---
+
+# 📂 Project Structure
+Feature3
+│
+├── backend
+│ ├── main.py
+│ ├── database.py
+│ ├── models.py
+│ ├── scanner.py
+│ ├── heat_engine.py
+│ └── recommendation.py
+│
+├── storage
+│ └── (files to analyze)
+│
+├── frontend
+│ └── index.html
+│
+└── README.md
+
+
