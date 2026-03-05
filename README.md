@@ -219,3 +219,37 @@ Returns counts of:
 "memory_type": "Warm",
 "recommendation": "Standard storage"
 }
+
+---
+
+# 🌍 Real-World Applications
+
+This system can be used in:
+
+- **Operating systems**
+- **Cloud storage platforms**
+- **Data center storage optimization**
+- **Enterprise storage analytics**
+- **AI-driven file management systems**
+
+---
+
+# 🔮 Future Improvements
+
+- Machine learning based usage prediction
+- Automatic file migration across storage tiers
+- Cloud storage integration
+- Real-time file monitoring
+- Advanced analytics dashboard
+
+---
+
+# 🏁 Hackathon Project
+
+Developed as part of a **Storage Intelligence Hackathon** to demonstrate how **AI can optimize memory and storage systems** by learning file usage behavior.
+
+---
+
+# 👨‍💻 Authors
+
+Team Project – AI Storage Intelligence System
