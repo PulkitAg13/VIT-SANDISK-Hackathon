@@ -66,3 +66,50 @@ Each file receives a **Heat Score** based on usage patterns.
 
 Example formula:
 Heat Score = 0.6 * Recency Score + 0.3 * Modification Score + 0.1 * Size Score
+
+The score ranges between **0 and 1**.
+
+---
+
+## 3️⃣ Memory Classification Engine
+Based on the Heat Score:
+
+| Heat Score | Memory Type |
+|------------|-------------|
+| > 0.95 | 🔥 Hot |
+| > 0.55 | 🟠 Warm |
+| ≤ 0.55 | 🔵 Cold |
+
+This mimics **multi-tier storage systems used in data centers**.
+
+---
+
+## 4️⃣ Smart Storage Recommendation System
+
+The system suggests optimal storage for each file:
+
+| Memory Type | Recommendation |
+|-------------|---------------|
+| Hot | Keep on SSD |
+| Warm | Standard storage |
+| Cold | Move to archival / HDD |
+
+---
+
+## 5️⃣ File Heatmap Visualization
+
+A visual dashboard shows **file activity as a heatmap**:
+
+| Color | Meaning |
+|------|--------|
+| 🔥 Red | Hot Files |
+| 🟠 Orange | Warm Files |
+| 🔵 Blue | Cold Files |
+
+This allows users to **instantly understand storage usage patterns**.
+
+---
+
+## 6️⃣ Storage Analytics Dashboard
+
+Provides summary statistics:
